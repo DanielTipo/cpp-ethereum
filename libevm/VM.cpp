@@ -246,8 +246,7 @@ void VM::interpretCases()
 
 			uint64_t b = (uint64_t)*m_SP--;
 			uint64_t s = (uint64_t)*m_SP--;
-			owning_bytes_ref output{ move(m_mem), b, s };
-			throwRevertInstruction(move(output));
+			throwRevertInstruction(owning_bytes_ref{move(m_mem), b, s});
 		}
 		BREAK; 
 
