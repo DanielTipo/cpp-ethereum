@@ -233,6 +233,24 @@ void VM::interpretCases()
 		}
 		BREAK
 
+		CASE(REVERT)
+		{
+			// Pre-metropolis 
+			if (!m_schedule->haveRevert)
+				throwBadInstruction();
+
+			m_newMemSize = memNeed(*m_SP, *(m_SP - 1));
+			updateMem();
+			ON_OP();
+			updateIOGas();
+
+			uint64_t b = (uint64_t)*m_SP--;
+			uint64_t s = (uint64_t)*m_SP--;
+			owning_bytes_ref output{ move(m_mem), b, s };
+			throwRevertInstruction(move(output));
+		}
+		BREAK; 
+
 		CASE(SUICIDE)
 		{
 			m_runGas = toInt63(m_schedule->suicideGas);

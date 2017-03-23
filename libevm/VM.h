@@ -150,6 +150,7 @@ private:
 	void throwBadInstruction();
 	void throwBadJumpDestination();
 	void throwBadStack(unsigned _size, unsigned _n, unsigned _d);
+	void throwRevertInstruction(owning_bytes_ref&& _output);
 
 	void reportStackUse();
 
