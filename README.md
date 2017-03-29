@@ -1,4 +1,8 @@
-# cpp-ethereum - Ethereum C++ client
+# cpp-ethereum-bitforint - Ethereum C++ client / BitForint client
+
+## This repository has been forked from cpp-ethereum. 
+## For official support please visit [cpp-ethereum](https://github.com/ethereum/cpp-ethereum)
+## DO NOT USE on ETH/ETC or other ethereum based chains.
 
 This repository contains [cpp-ethereum](http://cpp-ethereum.org), the [Ethereum](http://ethereum.org) C++ client.
 
@@ -6,15 +10,6 @@ It is the third most popular of the Ethereum clients, behind [geth](https://gith
 client) and [Parity](https://github.com/ethcore/parity) (the [rust](https://www.rust-lang.org/) client).  The code is exceptionally
 [portable](http://cpp-ethereum.org/portability.html) and has been used successfully on a very broad range
 of operating systems and hardware.
-
-
-## Contact
-
-[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/ethereum/cpp-ethereum)
-[![GitHub Issues](https://img.shields.io/github/issues-raw/badges/shields.svg)](https://github.com/ethereum/cpp-ethereum/issues)
-
-- Chat in [cpp-ethereum channel on Gitter](https://gitter.im/ethereum/cpp-ethereum).
-- Report bugs, issues or feature requests using [GitHub issues](issues/new).
 
 
 ## Getting Started
@@ -118,29 +113,6 @@ After configuration is completed the `cpp-ethereum.sln` can be found in the
 ```shell
 cmake -H. -Bbuild -G "Visual Studio 14 2015 Win64"
 ```
-
-## Contributing
-
-[![Contributors](https://img.shields.io/github/contributors/ethereum/cpp-ethereum.svg)](https://github.com/ethereum/cpp-ethereum/graphs/contributors)
-[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/ethereum/cpp-ethereum)
-[![up-for-grabs](https://img.shields.io/github/issues-raw/ethereum/cpp-ethereum/up-for-grabs.svg)](https://github.com/ethereum/cpp-ethereum/labels/up-for-grabs)
-
-The current codebase is the work of many, many hands, with nearly 100
-[individual contributors](https://github.com/ethereum/cpp-ethereum/graphs/contributors) over the course of its development.
-
-Our day-to-day development chat happens on the
-[cpp-ethereum](https://gitter.im/ethereum/cpp-ethereum) Gitter channel.
-
-All contributions are welcome! We try to keep a list of tasks that are suitable
-for newcomers under the tag 
-[up-for-grabs](https://github.com/ethereum/cpp-ethereum/labels/up-for-grabs).
-If you have any questions, please just ask.
-
-Please read [CodingStandards.txt](CodingStandards.txt) thoroughly before making
-alterations to the code base.
-
-All development goes in develop branch.
-
 
 ## Mining
 
