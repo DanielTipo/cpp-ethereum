@@ -80,23 +80,18 @@ void Ethash::verify(Strictness _s, BlockHeader const& _bi, BlockHeader const& _p
 	if (_s != CheckNothingNew)
 	{
 		if (_bi.difficulty() < chainParams().u256Param("minimumDifficulty"))
-			BOOST_THROW_EXCEPTION(InvalidDifficulty() << RequirementError(bigint(chainParams().u256Param("minimumDifficulty")), bigint(_bi.difficulty())) );
+			BOOST_THROW_EXCEPTION(InvalidDifficulty() << RequirementError(bigint(chainParams().u256Param("minimumDifficulty")), bigint(_bi.difficulty())));
 
 		if (_bi.gasLimit() < chainParams().u256Param("minGasLimit"))
-			BOOST_THROW_EXCEPTION(InvalidGasLimit() << RequirementError(bigint(chainParams().u256Param("minGasLimit")), bigint(_bi.gasLimit())) );
+			BOOST_THROW_EXCEPTION(InvalidGasLimit() << RequirementError(bigint(chainParams().u256Param("minGasLimit")), bigint(_bi.gasLimit())));
 
 		if (_bi.gasLimit() > chainParams().u256Param("maxGasLimit"))
-			BOOST_THROW_EXCEPTION(InvalidGasLimit() << RequirementError(bigint(chainParams().u256Param("maxGasLimit")), bigint(_bi.gasLimit())) );
+			BOOST_THROW_EXCEPTION(InvalidGasLimit() << RequirementError(bigint(chainParams().u256Param("maxGasLimit")), bigint(_bi.gasLimit())));
 
 		if (_bi.number() && _bi.extraData().size() > chainParams().maximumExtraDataSize)
 			BOOST_THROW_EXCEPTION(ExtraDataTooBig() << RequirementError(bigint(chainParams().maximumExtraDataSize), bigint(_bi.extraData().size())) << errinfo_extraData(_bi.extraData()));
-
-		u256 daoHardfork = chainParams().u256Param("daoHardforkBlock");
-		if (daoHardfork != 0 && daoHardfork + 9 >= daoHardfork && _bi.number() >= daoHardfork && _bi.number() <= daoHardfork + 9)
-			if (_bi.extraData() != fromHex("0x64616f2d686172642d666f726b"))
-				BOOST_THROW_EXCEPTION(ExtraDataIncorrect() << errinfo_comment("Received block from the wrong fork (invalid extradata)."));
 	}
-
+		
 	if (_parent)
 	{
 		// Check difficulty is correct given the two timestamps.
@@ -150,13 +145,8 @@ void Ethash::verifyTransaction(ImportRequirements::value _ir, TransactionBase co
 
 	if (_ir & ImportRequirements::TransactionSignatures)
 	{
-		if (_bi.number() >= chainParams().u256Param("EIP158ForkBlock"))
-		{
-			int chainID(chainParams().u256Param("chainID"));
-			_t.checkChainId(chainID);
-		}
-		else
-			_t.checkChainId(-4);
+		int chainID(chainParams().u256Param("chainID"));
+		_t.checkChainId(chainID);
 	}
 	// Unneeded as it's checked again in Executive. Keep it here since tests assume it's checked.
 	if (_ir & ImportRequirements::TransactionBasic && _t.baseGasRequired(evmSchedule(EnvInfo(_bi))) > _t.gas())
@@ -179,6 +169,7 @@ void Ethash::manuallySubmitWork(const h256& _mixHash, Nonce _nonce)
 	m_farm.submitProof(EthashProofOfWork::Solution{_nonce, _mixHash}, nullptr);
 }
 
+/// TODO: DIFFICULTY TARGETING
 u256 Ethash::calculateDifficulty(BlockHeader const& _bi, BlockHeader const& _parent) const
 {
 	const unsigned c_expDiffPeriod = 100000;
@@ -189,15 +180,7 @@ u256 Ethash::calculateDifficulty(BlockHeader const& _bi, BlockHeader const& _par
 	auto difficultyBoundDivisor = chainParams().u256Param("difficultyBoundDivisor");
 	auto durationLimit = chainParams().u256Param("durationLimit");
 
-	bigint target;	// stick to a bigint for the target. Don't want to risk going negative.
-	if (_bi.number() < chainParams().u256Param("homsteadForkBlock"))
-		// Frontier-era difficulty adjustment
-		target = _bi.timestamp() >= _parent.timestamp() + durationLimit ? _parent.difficulty() - (_parent.difficulty() / difficultyBoundDivisor) : (_parent.difficulty() + (_parent.difficulty() / difficultyBoundDivisor));
-	else
-		// Homestead-era difficulty adjustment
-		target = _parent.difficulty() + _parent.difficulty() / 2048 * max<bigint>(1 - (bigint(_bi.timestamp()) - _parent.timestamp()) / 10, -99);
-
-	bigint o = target;
+	bigint o = _parent.difficulty() + _parent.difficulty() / 2048 * max<bigint>(1 - (bigint(_bi.timestamp()) - _parent.timestamp()) / 10, -99);
 	unsigned periodCount = unsigned(_parent.number() + 1) / c_expDiffPeriod;
 	if (periodCount > 1)
 		o += (bigint(1) << (periodCount - 2));	// latter will eventually become huge, so ensure it's a bigint.

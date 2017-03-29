@@ -615,15 +615,6 @@ int main(int argc, char** argv)
 			chainParams = ChainParams(genesisInfo(eth::Network::MainNetwork), genesisStateRoot(eth::Network::MainNetwork));
 		else if (arg == "--ropsten" || arg == "--testnet")
 			chainParams = ChainParams(genesisInfo(eth::Network::Ropsten), genesisStateRoot(eth::Network::Ropsten));
-		else if (arg == "--oppose-dao-fork")
-		{
-			chainParams = ChainParams(genesisInfo(eth::Network::MainNetwork), genesisStateRoot(eth::Network::MainNetwork));
-			chainParams.otherParams["daoHardforkBlock"] = toHex(u256(-1) - 10, HexPrefix::Add);
-		}
-		else if (arg == "--support-dao-fork")
-		{
-			// default
-		}
 		else if (arg == "--bob")
 		{
 			cout << "Asking Bob for blocks (this should work in theoreum)..." << endl;

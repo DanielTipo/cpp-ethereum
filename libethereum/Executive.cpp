@@ -277,8 +277,7 @@ bool Executive::call(CallParameters const& _p, u256 const& _gasPrice, Address co
 			// because the bug in both Geth and Parity led to deleting RIPEMD precompiled in this case
 			// see https://github.com/ethereum/go-ethereum/pull/3341/files#diff-2433aa143ee4772026454b8abd76b9dd
 			// We mark the account as touched here, so that is can be removed among other touched empty accounts (after tx finalization)
-			if (m_envInfo.number() >= m_sealEngine.chainParams().u256Param("EIP158ForkBlock"))
-				m_s.addBalance(_p.codeAddress, 0);
+			m_s.addBalance(_p.codeAddress, 0);
 			
 			return true;	// true actually means "all finished - nothing more to be done regarding go().
 		}
@@ -331,8 +330,7 @@ bool Executive::create(Address _sender, u256 _endowment, u256 _gasPrice, u256 _g
 	// account if it does not exist yet.
 	m_s.transferBalance(_sender, m_newAddress, _endowment);
 
-	if (m_envInfo.number() >= m_sealEngine.chainParams().u256Param("EIP158ForkBlock"))
-		m_s.incNonce(m_newAddress);
+	m_s.incNonce(m_newAddress);
 
 	// Schedule _init execution if not empty.
 	if (!_init.empty())

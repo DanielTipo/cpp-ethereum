@@ -33,18 +33,10 @@ namespace eth
 /// The network id.
 enum class Network
 {
-	//Olympic = 0,			///< Normal Olympic chain.
-	MainNetwork = 1,		///< Normal Frontier/Homestead/DAO/EIP150/EIP158/Metropolis chain.
-	//Morden = 2,			///< Normal Morden chain.
-	Ropsten = 3,			///< New Ropsten Test Network
-	MainNetworkTest = 69,	///< MainNetwork rules but without genesis accounts (for transaction tests).
-	TransitionnetTest = 70,	///< Normal Frontier/Homestead/DAO/EIP150/EIP158 chain without all the premine.
-	FrontierTest = 71,		///< Just test the Frontier-era characteristics "forever" (no Homestead portion).
-	HomesteadTest = 72,		///< Just test the Homestead-era characteristics "forever" (no Frontier portion).
-	EIP150Test = 73,		///< Homestead + EIP150 Rules active from block 0 For BlockchainTests
-	EIP158Test = 74,		///< Homestead + EIP150 + EIP158 Rules active from block 0
-	MetropolisTest = 75,   ///< All fork rules + Metropolis active from block 0
-	Special = 0xff			///< Something else.
+	// NETWORKS 0x10000 - 0x1ffff
+	MainNetwork = 0x10000,
+	// TEST 0x20000 - 0x2ffff
+	MainNetworkTest = 0x20000
 };
 
 std::string const& genesisInfo(Network _n);

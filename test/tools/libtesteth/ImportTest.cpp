@@ -181,9 +181,8 @@ std::pair<eth::State, ImportTest::execOutput> ImportTest::executeTransaction(eth
 	try
 	{
 		unique_ptr<SealEngineFace> se(ChainParams(genesisInfo(_sealEngineNetwork)).createSealEngine());
-		bool removeEmptyAccounts = m_envInfo.number() >= se->chainParams().u256Param("EIP158ForkBlock");
 		ImportTest::execOutput execOut = initialState.execute(_env, *se.get(), _tr);
-		initialState.commit(removeEmptyAccounts ? State::CommitBehaviour::RemoveEmptyAccounts : State::CommitBehaviour::KeepEmptyAccounts);
+		initialState.commit(State::CommitBehaviour::RemoveEmptyAccounts);
 		return std::pair<eth::State, ImportTest::execOutput>(initialState, execOut);
 	}
 	catch (Exception const& _e)
